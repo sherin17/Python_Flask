@@ -8,8 +8,8 @@ class Cart(db.Model):
     subTotal = db.Column(db.Float)
 
 class Purchases(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    uid = db.Column(db.Text)
+    id = db.Column(db.Integer)
+    uid = db.Column(db.Integer,primary_key=True)
     image = db.Column(db.Text)
     quantity = db.Column(db.Integer)
     date = db.Column(db.Date)

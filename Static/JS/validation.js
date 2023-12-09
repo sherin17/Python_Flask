@@ -13,6 +13,8 @@ const CONFIRM_MSG = $("#confirm-msg");
 const FNAME = $("#fname");
 const FNAME_MSG = $("#fname-msg");
 
+console.log(FNAME.val(),USERNAME_MSG);
+
 const LNAME = $("#lname");
 const LNAME_MSG = $("#lname-msg");
 

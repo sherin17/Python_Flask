@@ -15,7 +15,7 @@
 </head>
 
 <body>
-    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" >
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -46,14 +46,14 @@
                                             {% for i in range(shopLen) %}
                                             <tr>
                                                 <th scope="row">{{ i + 1 }}</th>
-                                                <td><img src="/static/Images/{{ shoppingCart[i]["image"] }}" width="30px" alt="{{ shoppingCart[i]["team"] }}" /></td>
+                                                <td><img src="/static/Images/{{ shoppingCart[i]['image'] }}" width="30px" alt="{{ shoppingCart[i]['team'] }}" /></td>
                                                 <td>{{ shoppingCart[i]['SUM(qty)'] }}</td>
-                                                <td>{{ '${:,.2f}'.format(shoppingCart[i]["price"]) }}</td>
-                                                <td>{{ '${:,.2f}'.format(shoppingCart[i]['SUM(subTotal)']) }}</td>
-                                            </tr>
+                                                <td>
+                                                    {{ '${:,.2f}'.format(shoppingCart[i]["price"]) if shoppingCart[i]["price"] is not none else 'N/A' }}
+                                                </td>
+                                                
+                                                <td>{{ '${:,.2f}'.format(shoppingCart[i]['SUM(subTotal)'] | default(0)) if shoppingCart[i]['SUM(subTotal)'] is not none else 'N/A' }}</td>                                            {% endfor %}
                                         </tbody>
-                                        {% endfor %}
-
                                         <tfoot>
                                             <tr>
                                                 <td colSpan="7">
@@ -67,12 +67,11 @@
                                             </tr>
                                         </tfoot>
                                         {% else %}
-
                                         <tr>
                                             <td colSpan="7"><h3> cart is empty :\</h3></td>
                                         </tr>
-
-                                        </tbody>
+<!-- 
+                                        </tbody> -->
                                         <tfoot>
                                             <tr>
                                                 <td colSpan="7">
@@ -96,9 +95,10 @@
     </div>
 
     <header>
+      
         <nav class="navbar fixed-top navbar-dark bg-dark navbar-expand-sm box-shadow">
             <a href="/" class="navbar-brand d-flex align-items-center">
-                <strong><i class="far fa-futbol"></i> Readers Paradise</strong>
+                <strong><i class="far fa-futbol"></i>BookLand</strong>
             </a>
             {% if session %}
             <ul class="navbar-nav mr-auto">
@@ -127,13 +127,16 @@
                 <div>
                     <button class="navbar-toggler" style="display:inline" type="button" data-toggle="modal" data-target="#modalCenter">
                         <span class="glyphicon glyphicon-shopping-cart" data-toggle="modal" data-target="">
-                            <i class="fas fa-shopping-cart"></i>
+                            <a href="/cart/"><i class="fas fa-shopping-cart"></i></a>
                             <span class="counter"> No. of Items: {{ totItems }}</span>
                             <span class="counter"> Total: ${{ '{:,.2f}'.format(total) }}</span>
                         </span>
                     </button>
                 </div>
         </nav>
+        <div class="topbar ">
+           <marquee>FREE Delivery On All Orders In Republic of Ireland</marquee>
+        </div>
     </header>
 
     <br />
@@ -145,15 +148,22 @@
             </div>
             {% endif %}
             {% block body %}{% endblock %}
+            </div>
             <footer>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md">
-                            <hr />
-                            <p>&#169; <a href="/">Readers Paradise</a></p>
-                        </div>
-                    </div>
-                </div>
+               <div class="column">
+                 <h2>Services</h2>
+                 <h4>Gift Certificate</h4>
+                 <h4>Wholesale</h4>
+                 <h4>Affiliates Program</h4>
+                 <h4>Deals & Discounts</h4>
+               </div>
+               <div class="column">
+                <h2>Support</h2>
+                <h4>Order Status</h4>
+                <h4>Return Policy</h4>
+                <h4>Support Center</h4>
+                <h4>Payment Methods</h4>
+              </div>
             </footer>
 
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
