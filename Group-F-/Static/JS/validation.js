@@ -4,12 +4,6 @@ const SUBMIT = $("#submit");
 const USERNAME = $("#uname");
 const USERNAME_MSG = $("#user-msg");
 
-const price=$("#price");
-const onsale=$("#onsale");
-const onsaleprice=$("#onsaleprice");
-const kind=$("#kind");
-const image=$('#image')
-
 const PASSWORD = $("#pwd");
 const PASSWORD_MSG = $("#password-msg");
 

@@ -12,7 +12,10 @@ app.config["SESSION_TYPE"] = "filesystem"
 app.secret_key = "Group_F_CA2_Project"
 Session(app)
 
+
 db = SQL ( "sqlite:///data.db" )
+admin=SQL("sqlite:///admin.db")
+
 @app.route("/")
 def index():
     books = db.execute("select * FROM books")
@@ -41,6 +44,11 @@ def index():
 def login():
     return render_template("login.html")
 
+
+@app.route("/adminlogin/", methods=["GET"])
+def adminlogin():
+    return render_template("adminlogin.html")
+
 @app.route("/signup/", methods=["GET"])
 def signup():
     return render_template("signup.html")
@@ -65,6 +73,38 @@ def logout():
     session.clear()
     return redirect("/")
 
+@app.route("/adminlogout/")
+def adminlogout():
+    session.clear()
+    return redirect("/adminlogin/")
+
+@app.route("/adminchanges/", methods=['GET'])
+def adminchanges():
+    return render_template("adminchanges.html")
+
+
+app.config['UPLOAD_FOLDER'] = 'static/images'
+
+@app.route("/adminchanges/", methods=['POST'])
+def adminchangesget():
+    price=request.form['price']
+    onsale=request.form['onsale']
+    onsaleprice=request.form['onsaleprice']
+    kind=request.form['kind']
+    file=request.files['image']
+    
+    checksale=0 if onsale=="Not Sale" else 1
+    if 'image' in request.files:
+        file.save(f"{app.config['UPLOAD_FOLDER']}/{file.filename}")
+        print('saved')
+    else:
+        print('not saved')
+        msg='file not uploded'
+        render_template('adminchanges.html',error=msg)    
+    
+    rows=db.execute("INSERT INTO BOOKS('image','price','onSale','onSalePrice','kind') VALUES(:img,:price,:onsale,:onsaleprice,:kind)",img=file.filename,price=price,onsale=checksale,onsaleprice=onsaleprice,kind=kind)
+    return render_template('adminchanges.html',msg='File Saved!')
+
 @app.route("/logged/", methods=["POST"] )
 def logged():
     user = request.form["uname"].lower()
@@ -83,7 +123,29 @@ def logged():
     if 'user' in session:
         return redirect ( "/" )
     return render_template ( "login.html", msg="invalid username or password." )
-       
+
+@app.route("/adminlogged/", methods=["POST"] )
+def adminlogged():
+    user = request.form["uname"].lower()
+    pwd = request.form["pwd"]
+    
+    if user == "" or pwd == "":
+        return render_template ( "adminlogin.html" )
+    query = "SELECT * FROM users WHERE username = :user AND password = :pwd"
+    rows = admin.execute ( query, user=user, pwd=pwd )
+    
+    print('rows',rows)
+    if len(rows) == 1:
+        session['user'] = user
+        session['time'] = datetime.now( )
+        session['uid'] = rows[0]["id"]
+    
+
+    if 'user' in session:
+        return redirect ( "/adminchanges/" )
+    return render_template ( "adminlogin.html", msg="invalid username or password." )
+
+
 @app.route("/purchase_history/")
 def history():
     shoppingCart = []
@@ -91,8 +153,10 @@ def history():
     totItems=0
     total=0
     display=0
-    myBooks = db.execute("SELECT * FROM purchases WHERE id=:uid", uid=session["uid"])
+    myBooks = db.execute("SELECT * FROM purchases where uid=:uid",uid=session['uid'])
+    print(session['uid'],myBooks)
     myBooksLen = len(myBooks)
+    print(myBooks)
     return render_template("purchase_history.html", shoppingCart=shoppingCart, shopLen=shopLen, total=total, totItems=totItems, display=display, session=session, myBooks=myBooks, myBooksLen=myBooksLen)
 
 
@@ -105,6 +169,7 @@ def checkout():
     display=0
     cart = db.execute("SELECT * FROM cart")
     
+    print(cart)
     for item in cart:
         try:     
                 db.execute("INSERT INTO purchases (id, uid, image, quantity, date) VALUES (:id, :uid, :image, :qty, :date)",
@@ -170,11 +235,11 @@ def filter():
     totItems, total, display = 0, 0, 0
     if 'user' in session:
         
-        shoppingCart = db.execute("SELECT image, SUM(qty), SUM(subTotal), price, id FROM cart")
+        shoppingCart = db.execute("SELECT * FROM cart")
         shopLen = len(shoppingCart)
         for i in range(shopLen):
-            total += shoppingCart[i]["SUM(subTotal)"]
-            totItems += shoppingCart[i]["SUM(qty)"]
+            total += shoppingCart[i]["subTotal"]
+            totItems += shoppingCart[i]["qty"]
         
         return render_template ("index.html", shoppingCart=shoppingCart, books=books, shopLen=shopLen, booksLen=booksLen, total=total, totItems=totItems, display=display, session=session )
     
@@ -270,12 +335,7 @@ def update():
         print(total,totItems)
         return render_template ("cart.html",subTotal=subTotal, shoppingCart=shoppingCart, shopLen=shopLen, total=total, totItems=totItems, display=display, session=session )
 
-<<<<<<< HEAD
 
 if __name__ == '__main__':
     locale.setlocale(locale.LC_ALL, 'fr_FR.UTF-8')
     app.run(debug=True)
-=======
-if __name__ == "__main__":
- app.run(host='0.0.0.0', port='8080') # indent this line
->>>>>>> 58a0ede2a6b7c84df494a9f03f3a3abf0a6b29f3
