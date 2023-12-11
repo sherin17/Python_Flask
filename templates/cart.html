@@ -1,6 +1,6 @@
 {% extends "base_template.html" %}
 {% block title %}
-BookLand - Cart
+DressDash - Cart
 {% endblock %}
 
 {% block body %}
@@ -45,7 +45,6 @@ BookLand - Cart
                           <td><form action="/update/">
                               <input type="hidden" name="id" value="{{shoppingCart[i].id}}" />
                               <input type="number" name="quantity" min="1" max="10" size="5" value="{{ shoppingCart[i].qty }}">
-                              <button type="submit" class="btn btn-warning checkout">Update</button>
                             </form></td>
                             <td>
                               {% if shoppingCart[i].price is not none %}
@@ -62,6 +61,7 @@ BookLand - Cart
                           <td>
                             <form action="/remove/" methods="GET">
                               <input type="hidden" name="id" value="{{ shoppingCart[i].id }}" />
+                              <button type="submit" class="btn btn-warning checkout">Update</button>
                               <button type="submit" class="btn btn-secondary btn-sm" id="removeFromCart">Remove</button>
                             </form>
                           </td>

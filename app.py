@@ -1,7 +1,7 @@
 from cs50 import SQL
 import sqlite3
 from flask_session import Session
-from flask import Flask, render_template,session, redirect,request
+from flask import Flask, render_template,session, redirect,request,flash
 from datetime import datetime
 import locale
 
@@ -78,9 +78,48 @@ def adminlogout():
     session.clear()
     return redirect("/adminlogin/")
 
+#Admin Home page
+@app.route("/adminhome/", methods=['GET'])
+def adminhome():
+    if 'user' not in session:
+        return redirect("/adminlogin/")  # Redirect to admin login page if not logged in
+    
+    # Fetch books from the database, including the image column
+    books = db.execute("SELECT id, image, price, onSale, onSalePrice, kind FROM books")
+    
+    # Fetch shopping cart information (if needed)
+    shoppingCart = db.execute("SELECT image, SUM(qty), SUM(subTotal), price, id FROM cart")
+    shopLen = len(shoppingCart)
+    total, totItems = 0, 0
+
+    for i in range(shopLen):
+        if shoppingCart[i]["SUM(subTotal)"] is not None:
+            total += shoppingCart[i]["SUM(subTotal)"]
+        if shoppingCart[i]["SUM(qty)"] is not None:
+            totItems += shoppingCart[i]["SUM(qty)"]
+
+    booksLen = len(books)
+    
+    return render_template("adminhome.html", shoppingCart=shoppingCart, books=books, shopLen=shopLen, booksLen=booksLen, total=total, totItems=totItems, session=session)
+
+#delete a book
+@app.route("/removeitem/", methods=["GET"])
+def removeitem():   
+ book_id = int(request.args.get("id"))
+      
+ db.execute("DELETE from book WHERE id=:id", id=book_id)
+        
+ books = db.execute("SELECT id, image, price, onSale, onSalePrice, kind FROM books")
+ booksLen = len(books)
+    
+ return render_template("adminhome.html", shoppingCart=shoppingCart, books=books, shopLen=shopLen, booksLen=booksLen, total=total, totItems=totItems, session=session)
+
+
+#add a new dress
 @app.route("/adminchanges/", methods=['GET'])
 def adminchanges():
     return render_template("adminchanges.html")
+
 
 
 app.config['UPLOAD_FOLDER'] = 'static/images'
@@ -99,7 +138,7 @@ def adminchangesget():
         print('saved')
     else:
         print('not saved')
-        msg='file not uploded'
+        msg='file not uploaded'
         render_template('adminchanges.html',error=msg)    
     
     rows=db.execute("INSERT INTO BOOKS('image','price','onSale','onSalePrice','kind') VALUES(:img,:price,:onsale,:onsaleprice,:kind)",img=file.filename,price=price,onsale=checksale,onsaleprice=onsaleprice,kind=kind)

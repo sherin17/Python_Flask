@@ -47,9 +47,9 @@ function validate() {
     SUBMIT.hide();
 
 
-    if (!USERNAME.val() || USERNAME.val().length < 5) {
+    if (!USERNAME.val() || USERNAME.val().length < 6) {
 
-        USERNAME_MSG.html("Username must be of atleast five characters");
+        USERNAME_MSG.html("Invalid Username");
         USERNAME_MSG.show();
         console.log("Bad username");
         valid = false;
@@ -69,7 +69,7 @@ function validate() {
     }
 
     if (!CONFIRM.val() || PASSWORD.val() != CONFIRM.val()) {
-        CONFIRM_MSG.html("Enetered Passwords donot match");
+        CONFIRM_MSG.html(" Passwords doesn't match");
         CONFIRM_MSG.show();
         valid = false;
     }
