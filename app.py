@@ -102,18 +102,22 @@ def adminhome():
     
     return render_template("adminhome.html", shoppingCart=shoppingCart, books=books, shopLen=shopLen, booksLen=booksLen, total=total, totItems=totItems, session=session)
 
-#delete a book
+# Delete a book
 @app.route("/removeitem/", methods=["GET"])
-def removeitem():   
- book_id = int(request.args.get("id"))
-      
- db.execute("DELETE from book WHERE id=:id", id=book_id)
-        
- books = db.execute("SELECT id, image, price, onSale, onSalePrice, kind FROM books")
- booksLen = len(books)
-    
- return render_template("adminhome.html", shoppingCart=shoppingCart, books=books, shopLen=shopLen, booksLen=booksLen, total=total, totItems=totItems, session=session)
+def removeitem():
+    try:
+        book_id = int(request.args.get("id"))
+        db.execute("DELETE from books WHERE id=:id", id=book_id)
 
+    except Exception as e:
+        # Handle exceptions, print or log the error
+        print(f"Error: {e}")
+
+    # Fetch updated books after deletion
+    books = db.execute("SELECT id, image, price, onSale, onSalePrice, kind FROM books")
+    booksLen = len(books)
+
+    return render_template("adminhome.html", books=books,  booksLen=booksLen, session=session)
 
 #add a new dress
 @app.route("/adminchanges/", methods=['GET'])

@@ -37,6 +37,7 @@
         <table class="table table-sm">
             <thead>
               <tr>
+                <th scope="col">ID</th>
                 <th scope="col">Dress</th>
                 <th scope="col">Price</th>
                 <th scope="col">Kind</th>
@@ -46,11 +47,13 @@
             <tbody>
                 {% for book in books %}
                 <tr>
+                    <td>{{book['id']}}</td>
                     <td><img src="{{ url_for('static', filename='Images/' + book['image']) }}" width="60px" height="60px" alt="{{ book['image'] }}" /></td>
                     <td>{{ book['price'] }}</td>
                     <td>{{ book['kind'] }}</td>
                     <td>
                         <form action="/removeitem/" methods="GET">
+                            <input type="hidden" name="id" value="{{ book['id'] }}">
                             <button type="submit" class="btn btn-secondary btn-sm" id="RemoveItem">Remove</button></a>
                         </form>
                     </td>
