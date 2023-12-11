@@ -11,7 +11,7 @@
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Book</th>
+                <th scope="col">Dresses</th>
                 <th scope="col">Quantity</th>
                 <th scope="col">Date</th>
                 <th scope="col"></th>
@@ -24,7 +24,6 @@
                 <td><img src="{{ url_for('static', filename='Images/' + myBooks[i]['image']) }}" width="30px" alt="{{ myBooks[i]['team'] }}" /></td>
                 <td>{{ myBooks[i]["quantity"] }}</td>
                 <td>{{ myBooks[i]["date"] }}</td>
-                <td><a href="/filter/?id={{ myBooks[i]['id'] }}"><button type="button" class="btn btn-warning">Purchase Again</button></a></td>
               </tr>
             </tbody>
             {% endfor %}

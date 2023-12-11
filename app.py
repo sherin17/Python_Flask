@@ -36,9 +36,9 @@ def index():
             totItems += shoppingCart[i]["SUM(qty)"]
         books = db.execute("SELECT * FROM books")
         booksLen = len(books)
-        return render_template ("index.html", shoppingCart=shoppingCart, books=books, shopLen=shopLen, booksLen=booksLen, total=total, totItems=totItems, display=display, session=session )
+        return render_template ("userhomepage.html", shoppingCart=shoppingCart, books=books, shopLen=shopLen, booksLen=booksLen, total=total, totItems=totItems, display=display, session=session )
 
-    return render_template ("index.html", books=books, shoppingCart=shoppingCart, booksLen=booksLen, shopLen=shopLen, total=total, totItems=totItems, display=display)
+    return render_template ("userhomepage.html", books=books, shoppingCart=shoppingCart, booksLen=booksLen, shopLen=shopLen, total=total, totItems=totItems, display=display)
 
 @app.route("/login/", methods=["GET"])
 def login():
@@ -185,7 +185,7 @@ def adminlogged():
     
 
     if 'user' in session:
-        return redirect ( "/adminchanges/" )
+        return redirect ( "/adminhome/" )
     return render_template ( "adminlogin.html", msg="invalid username or password." )
 
 
