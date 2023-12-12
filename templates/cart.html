@@ -21,7 +21,7 @@ DressDash - Cart
                     <thead>
                       <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Book</th>
+                        <th scope="col">Dress</th>
                         <th scope="col">Quantity</th>
                         <th scope="col">Unit Price</th>
                         <th scope="col">Sub-Total</th>
@@ -61,7 +61,6 @@ DressDash - Cart
                           <td>
                             <form action="/remove/" methods="GET">
                               <input type="hidden" name="id" value="{{ shoppingCart[i].id }}" />
-                              <button type="submit" class="btn btn-warning checkout">Update</button>
                               <button type="submit" class="btn btn-secondary btn-sm" id="removeFromCart">Remove</button>
                             </form>
                           </td>
@@ -85,7 +84,7 @@ DressDash - Cart
                   </tbody>
                   <tfoot>
                     <tr>
-                      <td colSpan="7">Get some books now!<br />
+                      <td colSpan="7">Get some Dresses now!<br />
                         <div>
                           <a href="/"><button type="button" class="btn btn-secondary" data-dismiss="modal">Continue Shopping</button></a>
                         </div>

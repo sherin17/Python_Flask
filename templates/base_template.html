@@ -34,7 +34,7 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col">#</th>
-                                                <th scope="col">Book</th>
+                                                <th scope="col">Dresses</th>
                                                 <th scope="col">Quantity</th>
                                                 <th scope="col">Unit Price</th>
                                                 <th scope="col">Sub Total</th>
@@ -61,7 +61,6 @@
                                                     <div class="modal-footer">
                                                         <a href="/cart/"> <button type="button" class="btn btn-primary checkout">Make Changes</button></a>
                                                         <button type="button" class="btn btn-primary checkout" data-dismiss="modal">Continue Shopping</button>
-                                                        <a href="/checkout/"> <button type="button" class="btn btn-success checkout">Checkout</button></a>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -127,8 +126,6 @@
                     <button class="navbar-toggler" style="display:inline" type="button" data-toggle="modal" data-target="#modalCenter">
                         <span class="glyphicon glyphicon-shopping-cart" data-toggle="modal" data-target="">
                             <a href="/cart/"><i class="fas fa-shopping-cart"></i></a>
-                            <span class="counter"> No. of Items: {{ totItems }}</span>
-                            <span class="counter"> Total: ${{ '{:,.2f}'.format(total) }}</span>
                         </span>
                     </button>
                 </div>
@@ -146,20 +143,7 @@
             {% block body %}{% endblock %}
             </div>
             <footer>
-               <div class="column">
-                 <h2>Services</h2>
-                 <h4>Gift Certificate</h4>
-                 <h4>Wholesale</h4>
-                 <h4>Affiliates Program</h4>
-                 <h4>Deals & Discounts</h4>
-               </div>
-               <div class="column">
-                <h2>Support</h2>
-                <h4>Order Status</h4>
-                <h4>Return Policy</h4>
-                <h4>Support Center</h4>
-                <h4>Payment Methods</h4>
-              </div>
+               
             </footer>
 
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
