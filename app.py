@@ -18,8 +18,8 @@ admin=SQL("sqlite:///admin.db")
 
 @app.route("/")
 def index():
-    books = db.execute("select * FROM books")
-    booksLen = len(books)
+    Dresses = db.execute("select * FROM Dresses")
+    DressesLen = len(Dresses)
     shoppingCart = []
     shopLen = len(shoppingCart)
     totItems= 0
@@ -34,11 +34,11 @@ def index():
             total += shoppingCart[i]["SUM(subTotal)"]
           if(shoppingCart[i]["SUM(qty)"] is not None):
             totItems += shoppingCart[i]["SUM(qty)"]
-        books = db.execute("SELECT * FROM books")
-        booksLen = len(books)
-        return render_template ("userhomepage.html", shoppingCart=shoppingCart, books=books, shopLen=shopLen, booksLen=booksLen, total=total, totItems=totItems, display=display, session=session )
+        Dresses = db.execute("SELECT * FROM Dresses")
+        DressesLen = len(Dresses)
+        return render_template ("userhomepage.html", shoppingCart=shoppingCart, Dresses=Dresses, shopLen=shopLen, DressesLen=DressesLen, total=total, totItems=totItems, display=display, session=session )
 
-    return render_template ("userhomepage.html", books=books, shoppingCart=shoppingCart, booksLen=booksLen, shopLen=shopLen, total=total, totItems=totItems, display=display)
+    return render_template ("userhomepage.html", Dresses=Dresses, shoppingCart=shoppingCart, DressesLen=DressesLen, shopLen=shopLen, total=total, totItems=totItems, display=display)
 
 @app.route("/login/", methods=["GET"])
 def login():
@@ -84,8 +84,8 @@ def adminhome():
     if 'user' not in session:
         return redirect("/adminlogin/")  # Redirect to admin login page if not logged in
     
-    # Fetch books from the database, including the image column
-    books = db.execute("SELECT id, image, price, onSale, onSalePrice, kind FROM books")
+    # Fetch Dresses from the database, including the image column
+    Dresses = db.execute("SELECT id, image, price, onSale, onSalePrice, kind FROM Dresses")
     
     # Fetch shopping cart information (if needed)
     shoppingCart = db.execute("SELECT image, SUM(qty), SUM(subTotal), price, id FROM cart")
@@ -98,26 +98,26 @@ def adminhome():
         if shoppingCart[i]["SUM(qty)"] is not None:
             totItems += shoppingCart[i]["SUM(qty)"]
 
-    booksLen = len(books)
+    DressesLen = len(Dresses)
     
-    return render_template("adminhome.html", shoppingCart=shoppingCart, books=books, shopLen=shopLen, booksLen=booksLen, total=total, totItems=totItems, session=session)
+    return render_template("adminhome.html", shoppingCart=shoppingCart, Dresses=Dresses, shopLen=shopLen, DressesLen=DressesLen, total=total, totItems=totItems, session=session)
 
 # Delete a book
 @app.route("/removeitem/", methods=["GET"])
 def removeitem():
     try:
         book_id = int(request.args.get("id"))
-        db.execute("DELETE from books WHERE id=:id", id=book_id)
+        db.execute("DELETE from Dresses WHERE id=:id", id=book_id)
 
     except Exception as e:
         # Handle exceptions, print or log the error
         print(f"Error: {e}")
 
-    # Fetch updated books after deletion
-    books = db.execute("SELECT id, image, price, onSale, onSalePrice, kind FROM books")
-    booksLen = len(books)
+    # Fetch updated Dresses after deletion
+    Dresses = db.execute("SELECT id, image, price, onSale, onSalePrice, kind FROM Dresses")
+    DressesLen = len(Dresses)
 
-    return render_template("adminhome.html", books=books,  booksLen=booksLen, session=session)
+    return render_template("adminhome.html", Dresses=Dresses,  DressesLen=DressesLen, session=session)
 
 #add a new dress
 @app.route("/adminchanges/", methods=['GET'])
@@ -145,7 +145,7 @@ def adminchangesget():
         msg='file not uploaded'
         render_template('adminchanges.html',error=msg)    
     
-    rows=db.execute("INSERT INTO BOOKS('image','price','onSale','onSalePrice','kind') VALUES(:img,:price,:onsale,:onsaleprice,:kind)",img=file.filename,price=price,onsale=checksale,onsaleprice=onsaleprice,kind=kind)
+    rows=db.execute("INSERT INTO Dresses('image','price','onSale','onSalePrice','kind') VALUES(:img,:price,:onsale,:onsaleprice,:kind)",img=file.filename,price=price,onsale=checksale,onsaleprice=onsaleprice,kind=kind)
     return render_template('adminchanges.html',msg='File Saved!')
 
 @app.route("/logged/", methods=["POST"] )
@@ -196,11 +196,11 @@ def history():
     totItems=0
     total=0
     display=0
-    myBooks = db.execute("SELECT * FROM purchases where uid=:uid",uid=session['uid'])
-    print(session['uid'],myBooks)
-    myBooksLen = len(myBooks)
-    print(myBooks)
-    return render_template("purchase_history.html", shoppingCart=shoppingCart, shopLen=shopLen, total=total, totItems=totItems, display=display, session=session, myBooks=myBooks, myBooksLen=myBooksLen)
+    myDresses = db.execute("SELECT * FROM purchases where uid=:uid",uid=session['uid'])
+    print(session['uid'],myDresses)
+    myDressesLen = len(myDresses)
+    print(myDresses)
+    return render_template("purchase_history.html", shoppingCart=shoppingCart, shopLen=shopLen, total=total, totItems=totItems, display=display, session=session, myDresses=myDresses, myDressesLen=myDressesLen)
 
 
 @app.route("/checkout/")
@@ -261,17 +261,17 @@ def remove():
 def filter():
     if request.args.get('sale'):
         query = request.args.get('sale')
-        books = db.execute("SELECT * FROM books WHERE onSale = :query", query=query)
+        Dresses = db.execute("SELECT * FROM Dresses WHERE onSale = :query", query=query)
     
     if request.args.get('kind'):
         query = request.args.get('kind')
-        books = db.execute("SELECT * FROM books WHERE kind = :query", query=query)
+        Dresses = db.execute("SELECT * FROM Dresses WHERE kind = :query", query=query)
         
     if request.args.get('price'):
         query = request.args.get('price')
-        books = db.execute("SELECT * FROM books")
+        Dresses = db.execute("SELECT * FROM Dresses")
         
-    booksLen = len(books)
+    DressesLen = len(Dresses)
     
     shoppingCart = []
     shopLen = len(shoppingCart)
@@ -284,9 +284,9 @@ def filter():
             total += shoppingCart[i]["subTotal"]
             totItems += shoppingCart[i]["qty"]
         
-        return render_template ("index.html", shoppingCart=shoppingCart, books=books, shopLen=shopLen, booksLen=booksLen, total=total, totItems=totItems, display=display, session=session )
+        return render_template ("index.html", shoppingCart=shoppingCart, Dresses=Dresses, shopLen=shopLen, DressesLen=DressesLen, total=total, totItems=totItems, display=display, session=session )
     
-    return render_template ( "index.html", books=books, shoppingCart=shoppingCart, booksLen=booksLen, shopLen=shopLen, total=total, totItems=totItems, display=display)
+    return render_template ( "index.html", Dresses=Dresses, shoppingCart=shoppingCart, DressesLen=DressesLen, shopLen=shopLen, total=total, totItems=totItems, display=display)
 
 
 @app.route("/buy/")
@@ -297,7 +297,7 @@ def buy():
 
     if session:
         id = int(request.args.get('id'))
-        goods = db.execute("SELECT * FROM books WHERE id = :id", id=id)
+        goods = db.execute("SELECT * FROM Dresses WHERE id = :id", id=id)
 
         if goods and goods[0]["onSale"] == 1:
             price = goods[0]["onSalePrice"]
@@ -338,10 +338,10 @@ def buy():
             total = sum(item["total_subtotal"] for item in shoppingCart)
             totItems = sum(item["total_qty"] for item in shoppingCart)
 
-            books = db.execute("SELECT * FROM books")
-            booksLen = len(books)
+            Dresses = db.execute("SELECT * FROM Dresses")
+            DressesLen = len(Dresses)
 
-            return render_template("index.html", shoppingCart=shoppingCart, books=books, shopLen=len(shoppingCart), booksLen=booksLen, total=total, totItems=totItems, display=display, session=session)
+            return render_template("index.html", shoppingCart=shoppingCart, Dresses=Dresses, shopLen=len(shoppingCart), DressesLen=DressesLen, total=total, totItems=totItems, display=display, session=session)
 
 @app.route("/update/")
 def update():
@@ -354,7 +354,7 @@ def update():
         id = int(request.args.get('id'))
         db.execute("DELETE FROM cart WHERE id = :id", id=id)
      
-        bookitems = db.execute("SELECT * FROM books WHERE id = :id", id=id)
+        bookitems = db.execute("SELECT * FROM Dresses WHERE id = :id", id=id)
        
         if(bookitems[0]["onSale"] == 1):
             price = bookitems[0]["onSalePrice"]

@@ -22,7 +22,7 @@ class Users(db.Model):
     lname = db.Column(db.Text)
     email = db.Column(db.Text, unique=True, nullable=False)
 
-class Books(db.Model):
+class Dresses(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoIncrement=True)
     image = db.Column(db.Text)
     price = db.Column(db.Float)

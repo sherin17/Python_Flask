@@ -52,15 +52,15 @@
               </tr>
             </thead>
             <tbody>
-                {% for book in books %}
+                {% for Dress in Dresses %}
                 <tr>
-                    <td>{{book['id']}}</td>
-                    <td><img src="{{ url_for('static', filename='Images/' + book['image']) }}" width="60px" height="60px" alt="{{ book['image'] }}" /></td>
-                    <td>{{ book['price'] }}</td>
-                    <td>{{ book['kind'] }}</td>
+                    <td>{{Dress['id']}}</td>
+                    <td><img src="{{ url_for('static', filename='Images/' + Dress['image']) }}" width="60px" height="60px" alt="{{ Dress['image'] }}" /></td>
+                    <td>{{ Dress['price'] }}</td>
+                    <td>{{ Dress['kind'] }}</td>
                     <td>
                         <form action="/removeitem/" methods="GET">
-                            <input type="hidden" name="id" value="{{ book['id'] }}">
+                            <input type="hidden" name="id" value="{{ Dress['id'] }}">
                             <button type="submit" class="btn btn-secondary btn-sm" id="RemoveItem">Remove</button></a>
                         </form>
                     </td>
