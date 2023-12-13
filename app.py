@@ -38,7 +38,7 @@ def index():
         DressesLen = len(Dresses)
         return render_template ("userhomepage.html", shoppingCart=shoppingCart, Dresses=Dresses, shopLen=shopLen, DressesLen=DressesLen, total=total, totItems=totItems, display=display, session=session )
 
-    return render_template ("userhomepage.html", Dresses=Dresses, shoppingCart=shoppingCart, DressesLen=DressesLen, shopLen=shopLen, total=total, totItems=totItems, display=display)
+    return render_template ("index.html", Dresses=Dresses, shoppingCart=shoppingCart, DressesLen=DressesLen, shopLen=shopLen, total=total, totItems=totItems, display=display)
 
 @app.route("/login/", methods=["GET"])
 def login():
